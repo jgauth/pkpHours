@@ -1,0 +1,46 @@
+service: pkpHours
+
+provider:
+  name: aws
+  runtime: python3.6
+
+  region: us-west-2
+
+  environment:
+    TABLE_MAIN: ${self:service}-table_main-${opt:stage, self:provider.stage}
+    TABLE_APPROVE: ${self:service}-table_approve-${opt:stage, self:provider.stage}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_MAIN}"
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+            path: test
+            method: post
+  add_main:
+    handler: handler.add_main
+    events:
+      - http:
+          path: /{id}
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    MainDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:

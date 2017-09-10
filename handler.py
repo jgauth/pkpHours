@@ -9,7 +9,8 @@ dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
 def add_approve(event, context):
     data = parse_qs(event['body'])
 
-    table = dynamodb.Table(os.environ['TABLE_APPROVE'])
+    tableApprove = dynamodb.Table(os.environ['TABLE_APPROVE'])
+    tableMain = dynamodb.Table(os.environ['TABLE_MAIN'])
 
     item = {
         'id': str(uuid.uuid1()),
@@ -19,7 +20,17 @@ def add_approve(event, context):
         'proctor': data['proctor'][0]
     }
 
-    table.put_item(Item=item)
+    checkResponse = tableMain.get_item(
+        Key={
+            'uoId': data['uoId'][0]
+        }
+    )
+
+    if 'Item' in checkResponse:
+        tableApprove.put_item(Item=item)
+        response = {}
+    else:
+        response = {}
 
     response = {
     "statusCode": 200,

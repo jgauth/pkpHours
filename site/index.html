@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en-US">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="main.js"></script>
+  <title>PKP Study Hours</title>
+</head>
+
+<body>
+  <h1>PKP Study Hours</h1>
+
+  <h2>Submit Hours:</h2>
+
+  <form name="formHours" id="formHours">
+    UO 95-ID Number: <br>
+    <input id="uoId" required /><br>
+    Hours: <br>
+    <input type="number" id="numHours" step="0.1" min="0" required><br>
+    Date: <br>
+    <input type="date" id="date" required><br><br>
+
+    <select form="formHours" id="proctor">
+      <option value="" disabled selected>Select a proctor</option>
+      <option value="Drew">Drew</option>
+      <option value="John">John</option>
+      <option value="Jace">Jace</option>
+    </select><br><br>
+
+    <button id="submit">Submit</button>
+  </form>
+
+  <div id="responseField">
+
+  </div>
+
+
+</body>
+</html>

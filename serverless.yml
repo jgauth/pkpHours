@@ -23,13 +23,6 @@ provider:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_APPROVE}"
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-            path: test
-            method: post
-
   add_approve:
     handler: handler.add_approve
     events:

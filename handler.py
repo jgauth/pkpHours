@@ -9,17 +9,21 @@ dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
 def add_approve(event, context):
 
     #might be broken
-    data = json.loads(event['body'])
+    #data = json.loads(event['body'])
 
     tableApprove = dynamodb.Table(os.environ['TABLE_APPROVE'])
     tableMain = dynamodb.Table(os.environ['TABLE_MAIN'])
 
+    # item = {
+    #     'id': str(uuid.uuid1()),
+    #     'uoId': data['uoId'][0],
+    #     'numHours': data['numHours'][0],
+    #     'date': data['date'][0],
+    #     'proctor': data['proctor'][0]
+    # }
+
     item = {
-        'id': str(uuid.uuid1()),
-        'uoId': data['uoId'][0],
-        'numHours': data['numHours'][0],
-        'date': data['date'][0],
-        'proctor': data['proctor'][0]
+        'foo': 'bar'
     }
 
     # checkResponse = tableMain.get_item(

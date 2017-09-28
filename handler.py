@@ -2,51 +2,45 @@ import json
 import boto3
 import os
 import uuid
-from urllib.parse import parse_qs
 
 dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
 
 def add_approve(event, context):
 
-    #might be broken
-    #data = json.loads(event['body'])
+    data = json.loads(event['body'])
 
     tableApprove = dynamodb.Table(os.environ['TABLE_APPROVE'])
     tableMain = dynamodb.Table(os.environ['TABLE_MAIN'])
 
-    # item = {
-    #     'id': str(uuid.uuid1()),
-    #     'uoId': data['uoId'][0],
-    #     'numHours': data['numHours'][0],
-    #     'date': data['date'][0],
-    #     'proctor': data['proctor'][0]
-    # }
-
     item = {
-        'foo': 'bar'
+        'id': str(uuid.uuid4()),
+        'uoId': data['uoId'],
+        'numHours': data['numHours'],
+        'date': data['date'],
+        'proctor': data['proctor']
     }
 
-    # checkResponse = tableMain.get_item(
-    #     Key={
-    #         'uoId': data['uoId'][0]
-    #     }
-    # )
-    #
-    # # Item will only be in checkResponse if an item exists with the requested uoId
-    # if 'Item' in checkResponse:
-    #     tableApprove.put_item(Item=item)
-    #     response = {} #fix this after testing
-    # else:
-    #     response = {} #fix this after testing
+
+    checkId = tableMain.get_item(
+        Key={
+            'uoId': data['uoId']
+        }
+    )
 
     response = {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin" : "*",
-            "Access-Control-Allow-Credentials" : True
-        },
-        body: json.dumps(item)
+        'headers': {
+            'Access-Control-Allow-Origin' : '*',
+            'Access-Control-Allow-Credentials' : True
+        }
     }
+
+    if 'Item' in checkId:
+        tableApprove.put_item(Item=item)
+        response['statusCode'] = 200
+        response['body'] = "goodId"
+    else:
+        response['statusCode'] = 400
+        response['body'] = "badId"
 
 
     return response

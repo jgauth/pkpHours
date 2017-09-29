@@ -27,6 +27,8 @@ def add_approve(event, context):
         }
     )
 
+    item['name'] = checkId['Item']['fname'] + " " + checkId['Item']['lname']
+
     response = {
         'headers': {
             'Access-Control-Allow-Origin' : '*',

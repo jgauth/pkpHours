@@ -1,5 +1,3 @@
-UNDER DEVELOPMENT
-===============
 PKP Hours
 ===============
 Service to track PKP Study Hours.
